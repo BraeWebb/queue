@@ -255,8 +255,8 @@ class QueueApp(tk.Frame):
                                    button="Request Long Help",
                                    colour_scheme=COLOUR_SCHEMES["long"],
                                    request_callback=lambda event=None: self.request(long_queue),
-                                   tick_function=lambda name: self.tick(quick_queue, name),
-                                   cross_function=lambda name: self.cross(quick_queue, name))
+                                   tick_function=lambda name: self.tick(long_queue, name),
+                                   cross_function=lambda name: self.cross(long_queue, name))
         long_frame.pack(side=tk.LEFT, anchor=tk.N, fill=tk.X, expand=True)
 
         self._quick_frame = quick_frame
@@ -283,7 +283,7 @@ class QueueApp(tk.Frame):
 
     def refresh(self):
         self.refresh_queues()
-        self.after(1000, self.refresh)
+        self.after(10000, self.refresh)
 
 
 class Queue:
