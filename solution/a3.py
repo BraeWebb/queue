@@ -343,48 +343,82 @@ class QueueApp(tk.Frame):
 
 
 class Queue:
+    """Queue of students waiting to have a question answered"""
+
     def __init__(self):
-        self.history = {}
-        self.times = {}
+        """Initialize a new queue"""
+        # list of students waiting in the queue
         self.waiting = []
 
+        # a map of students to the amount of questions they've asked
+        self.history = {}
+
+        # a map of students to the time they joined the queue
+        self.times = {}
+
     def add_student(self, name):
+        """Add a student to the queue
+
+        Parameters:
+            name (str): The name of the student that's joining
+        """
         if name in self.waiting:
             return
 
+        # update or set the questions asked count
         count = self.history.get(name, 0)
         self.history[name] = count + 1
 
+        # log the time they asked the question
         self.times[name] = datetime.datetime.now()
 
         self.waiting.append(name)
 
     def remove_student(self, name):
+        """Remove a student from the queue
+
+        Parameters:
+            name (str): The name of the student that's leaving
+        """
         self.waiting.remove(name)
 
-    def get_students(self):
-        return self.waiting
-
-    def format_time(self, start, now):
-        diff = now - start
-
-        hours = diff.days // 24
-        minutes = diff.seconds // 60
-
-        if hours > 0:
-            return str(hours) + (" hours" if hours > 1 else " hour")
-
-        if minutes > 0:
-            return str(minutes) + (" minutes" if minutes > 1 else " minute")
-
-        return "a few seconds ago"
-
     def get_questions(self):
+        """(list<Question>): The list of questions for this queue"""
         questions = []
         for i, student in enumerate(self.waiting):
-            questions.append(Question(i + 1, student, self.history[student],
-                                      self.format_time(self.times[student], datetime.datetime.now())))
+            question_count = self.history[student]
+            time_waiting = format_time(self.times[student], datetime.datetime.now())
+
+            questions.append(Question(i + 1, student, question_count, time_waiting))
         return questions
+
+
+def format_time(start, end):
+    """
+    Computes the difference between two times and displays a friendly format
+
+    If hours of difference displays 'X hours', if minutes 'X minutes', if only
+    seconds of difference, 'a few seconds ago'
+
+    Parameters:
+        start (datetime.datetime): The starting time
+        end (datetime.datetime): The end time to compare to start time
+
+    Returns:
+        (str): Formatted difference as specified above
+    """
+    diff = end - start
+
+    hours = diff.days // 24
+    minutes = diff.seconds // 60
+
+    if hours > 0:
+        return str(hours) + (" hours" if hours > 1 else " hour")
+
+    if minutes > 0:
+        return str(minutes) + (" minutes" if minutes > 1 else " minute")
+
+    return "a few seconds ago"
 
 
 def main():
