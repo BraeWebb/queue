@@ -9,6 +9,7 @@ import tkinter as tk
 from tkinter import simpledialog
 
 
+# example of type of quick queue questions
 QUICK_EXAMPLES = [
     "Syntax errors",
     "Interpreting error output",
@@ -16,6 +17,7 @@ QUICK_EXAMPLES = [
     "MyPyTutor submission issues"
 ]
 
+# example of types of long queue questions
 LONG_EXAMPLES = [
     "Open ended questions",
     "How to start a problem",
@@ -24,16 +26,35 @@ LONG_EXAMPLES = [
     "Assignment help"
 ]
 
+# text above the queue indicating an update to the queue has occurred
 IMPORTANT_TEXT = "As of 29/5, an update has been made to the queue to factor in the number of questions asked that day (since midnight the night prior), per student. Higher priority will be given to students with lower numbers of questions. This is calculated separately for each of the queues."
 
+# colours for indicating good and bad actions
 SUCCESS = "#5cb85c"
 DANGER = "#d9534f"
 
 
 class ColourScheme:
+    """
+    Container for a queue frame colour screen
+
+    Stores colour codes for various sections of the queue
+    """
+
     def __init__(self, header_background="#dff0d8", header_border="#d6e9c6",
                  header_text="#3c763d", subtitle_text="#666",
                  button_background="#5cb85c", button_border="#4cae4c"):
+        """
+        Create a new ColourScheme with provided colours or defaults
+
+        Parameters:
+            header_background (str): Colour of the headers background
+            header_border (str): Colour of the headers border
+            header_text (str): Colour of the headers title text
+            subtitle_text (str): Colour of the subtitle text in the header
+            button_background (str): Colour of the request buttons background
+            button_border (str): Colour of the question buttons border
+        """
         self.header_background = header_background
         self.header_border = header_border
         self.header_text = header_text
@@ -42,18 +63,30 @@ class ColourScheme:
         self.button_border = button_border
 
 
-COLOUR_SCHEMES = {
-    "long": ColourScheme(header_background="#d9edf7", header_border="#bce8f1",
-                         header_text="#31708f", subtitle_text="#666",
-                         button_background="#5bc0de", button_border="#46b8da"),
-    "quick": ColourScheme(header_background="#dff0d8", header_border="#d6e9c6",
-                          header_text="#3c763d", subtitle_text="#666",
-                          button_background="#5cb85c", button_border="#4cae4c")
-}
+# colour scheme for the long question section
+LONG_COLOURS = ColourScheme(header_background="#d9edf7", header_border="#bce8f1",
+                            header_text="#31708f", subtitle_text="#666",
+                            button_background="#5bc0de", button_border="#46b8da")
+
+# colour scheme for the quick question section
+QUICK_COLOURS = ColourScheme(header_background="#dff0d8", header_border="#d6e9c6",
+                             header_text="#3c763d", subtitle_text="#666",
+                             button_background="#5cb85c", button_border="#4cae4c")
 
 
 class Question:
+    """Data for a question displayed in a row on the queue"""
+
     def __init__(self, rank, name, questions, time):
+        """
+        Create a new Question
+
+        Parameters:
+            rank (int): The rank of the question in the queue
+            name (str): The name of the student who has a question
+            questions (int): The amount of questions already asked
+            time (str): How long the student has been waiting
+        """
         self.rank = rank
         self.name = name
         self.questions = questions
@@ -61,19 +94,42 @@ class Question:
 
 
 class Separator(tk.Frame):
+    """A horizontal line between widgets in a frame"""
+
     def __init__(self, master, *args, **kwargs):
+        """
+        Construct a new Separator
+
+        Parameters:
+            master (tk.Frame): Frame to place a horizontal line within
+            *args (*): Extra positional parameters to pass to tk.Frame
+            **kwargs (*): Extra keyword parameters to pass to tk.Frame
+        """
         super().__init__(master, relief=tk.RIDGE, height=2, bg="#eee",
                          *args, **kwargs)
 
 
 class InfoPane(tk.Frame):
+    """A box of important information to display to the user"""
+
     def __init__(self, master, title, text, foreground="#C09853",
                  background="#fefbed", *args, **kwargs):
+        """
+        Create a new InfoPane with a title and description
+
+        Parameters:
+            master (tk.Frame): The frame to place the pane within
+            title (str): The title of the information pane
+            text (str): Information displayed by this pane
+        """
         super().__init__(master, background=background, *args, **kwargs)
+
+        # bolded and coloured title
         title = tk.Label(self, text=title, background=background,
                          foreground=foreground, font=("Arial", 18, "bold"))
         title.pack(anchor=tk.W)
 
+        # information to display from this pane
         text = tk.Label(self, text=text, justify=tk.LEFT, wraplength=1000,
                         background=background)
         text.pack(anchor=tk.W)
@@ -242,7 +298,7 @@ class QueueApp(tk.Frame):
                                     subtitle="< 2 mins with a tutor",
                                     examples=QUICK_EXAMPLES,
                                     button="Request Quick Help",
-                                    colour_scheme=COLOUR_SCHEMES["quick"],
+                                    colour_scheme=QUICK_COLOURS,
                                     request_callback=lambda event=None: self.request(quick_queue),
                                     tick_function=lambda name: self.tick(quick_queue, name),
                                     cross_function=lambda name: self.cross(quick_queue, name))
@@ -253,7 +309,7 @@ class QueueApp(tk.Frame):
                                    subtitle="> 2 mins with a tutor",
                                    examples=LONG_EXAMPLES,
                                    button="Request Long Help",
-                                   colour_scheme=COLOUR_SCHEMES["long"],
+                                   colour_scheme=LONG_COLOURS,
                                    request_callback=lambda event=None: self.request(long_queue),
                                    tick_function=lambda name: self.tick(long_queue, name),
                                    cross_function=lambda name: self.cross(long_queue, name))
