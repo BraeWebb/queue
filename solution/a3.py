@@ -4,6 +4,7 @@ Assignment 3 Solution
 CSSE1001 Semester 2, 2018
 """
 
+import datetime
 import tkinter as tk
 from tkinter import simpledialog
 
@@ -260,6 +261,7 @@ class QueueApp(tk.Frame):
 
         self._quick_frame = quick_frame
         self._long_frame = long_frame
+        self.refresh()
 
     def request(self, queue):
         name = simpledialog.askstring("Name", "Please Enter Your Name")
@@ -279,10 +281,15 @@ class QueueApp(tk.Frame):
         self._quick_frame.refresh(self._quick_queue.get_questions())
         self._long_frame.refresh(self._long_queue.get_questions())
 
+    def refresh(self):
+        self.refresh_queues()
+        self.after(1000, self.refresh)
+
 
 class Queue:
     def __init__(self):
         self.history = {}
+        self.times = {}
         self.waiting = []
 
     def add_student(self, name):
@@ -292,6 +299,8 @@ class Queue:
         count = self.history.get(name, 0)
         self.history[name] = count + 1
 
+        self.times[name] = datetime.datetime.now()
+
         self.waiting.append(name)
 
     def remove_student(self, name):
@@ -300,10 +309,25 @@ class Queue:
     def get_students(self):
         return self.waiting
 
+    def format_time(self, start, now):
+        diff = now - start
+
+        hours = diff.days // 24
+        minutes = diff.seconds // 60
+
+        if hours > 0:
+            return str(hours) + (" hours" if hours > 1 else " hour")
+
+        if minutes > 0:
+            return str(minutes) + (" minutes" if minutes > 1 else " minute")
+
+        return "a few seconds ago"
+
     def get_questions(self):
         questions = []
         for i, student in enumerate(self.waiting):
-            questions.append(Question(i + 1, student, self.history[student], "N/A"))
+            questions.append(Question(i + 1, student, self.history[student],
+                                      self.format_time(self.times[student], datetime.datetime.now())))
         return questions
 
 
