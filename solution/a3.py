@@ -5,6 +5,7 @@ CSSE1001 Semester 2, 2018
 """
 
 import tkinter as tk
+from tkinter import simpledialog
 
 
 QUICK_EXAMPLES = [
@@ -23,6 +24,9 @@ LONG_EXAMPLES = [
 ]
 
 IMPORTANT_TEXT = "As of 29/5, an update has been made to the queue to factor in the number of questions asked that day (since midnight the night prior), per student. Higher priority will be given to students with lower numbers of questions. This is calculated separately for each of the queues."
+
+SUCCESS = "#5cb85c"
+DANGER = "#d9534f"
 
 
 class ColourScheme:
@@ -76,7 +80,8 @@ class InfoPane(tk.Frame):
 
 class QuestionFrame(tk.Frame):
     def __init__(self, master, title="Questions", subtitle="", examples=None,
-                 button="Request Help", colour_scheme=None, *args, **kwargs):
+                 button="Request Help", colour_scheme=None, request_callback=None,
+                 tick_function=None, cross_function=None, *args, **kwargs):
         super().__init__(master, padx=20, pady=20, *args, **kwargs)
         if examples is None:
             examples = []
@@ -84,6 +89,7 @@ class QuestionFrame(tk.Frame):
             colour_scheme = ColourScheme()
 
         self.colour_scheme = colour_scheme
+        self._request_callback = request_callback
 
         self.draw_header(title, subtitle)
         self.draw_examples(examples)
@@ -95,8 +101,8 @@ class QuestionFrame(tk.Frame):
 
         self.draw_separator()
 
-        self._question_table = question_table = QuestionTable(self)
-        question_table.pack(expand=True, fill=tk.BOTH)
+        self._question_table = QuestionTable(self, tick_function, cross_function)
+        self._question_table.pack(expand=True, fill=tk.BOTH)
 
     def draw_header(self, title, subtitle):
         header = QuestionHeader(self, title, subtitle,
@@ -119,7 +125,7 @@ class QuestionFrame(tk.Frame):
         button = tk.Button(self, text=text, font=("Arial", 14, ""), foreground="white",
                            background=self.colour_scheme.button_background,
                            highlightbackground=self.colour_scheme.button_background,
-                           padx=10, pady=10)
+                           padx=10, pady=10, command=self._request_callback)
         button.pack(pady=10)
 
     def draw_separator(self):
@@ -129,15 +135,18 @@ class QuestionFrame(tk.Frame):
         text = tk.Label(self, text="No students in queue.")
         text.pack(anchor=tk.W, pady=10)
 
-    def add_question(self, question):
-        self._question_table.add_question(question)
+    def refresh(self, questions):
+        self._question_table.refresh(questions)
 
 
 class QuestionTable(tk.Frame):
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, tick_function=None, cross_function=None,
+                 *args, **kwargs):
         super().__init__(master, *args, **kwargs)
 
-        self._current = 1
+        self._current = 2
+        self._tick_function = tick_function
+        self._cross_function = cross_function
 
         header = Question("#", "Name", "Questions Today", "Time")
 
@@ -147,7 +156,13 @@ class QuestionTable(tk.Frame):
         tk.Grid.columnconfigure(self, 3, weight=1)
         self.build_row(header, 0, font=("Arial", 14, "bold"))
 
-    def build_row(self, question, row, font=("Arial", 14, "")):
+        Separator(self).grid(row=1, column=0, columnspan=6,
+                             padx=5, pady=5, sticky=tk.NSEW)
+
+        self._questions = []
+
+    def build_row(self, question, row, tick=None, cross=None,
+                  font=("Arial", 14, "")):
         rank_label = tk.Label(self, text=question.rank, font=font)
         rank_label.grid(row=row, column=0)
 
@@ -160,9 +175,35 @@ class QuestionTable(tk.Frame):
         time_label = tk.Label(self, text=question.time, font=font)
         time_label.grid(row=row, column=3, sticky=tk.W)
 
+        cross_box = tick_box = None
+
+        if cross is not None:
+            cross_box = tk.Button(self, background=DANGER,
+                                  command=lambda: cross(question.name),
+                                  highlightbackground=DANGER, padx=8)
+            cross_box.grid(row=row, column=4)
+
+        if tick is not None:
+            tick_box = tk.Button(self, background=SUCCESS,
+                                 command=lambda: tick(question.name),
+                                 highlightbackground=SUCCESS, padx=8)
+            tick_box.grid(row=row, column=5)
+
+        return rank_label, name_label, questions_label, time_label, cross_box, tick_box
+
     def add_question(self, question):
-        self.build_row(question, self._current)
+        self._questions.append(self.build_row(question, self._current,
+                                              tick=self._tick_function,
+                                              cross=self._cross_function,))
         self._current += 1
+
+    def refresh(self, questions):
+        for question in self._questions:
+            for label in question:
+                label.grid_forget()
+
+        for question in questions:
+            self.add_question(question)
 
 
 class QuestionHeader(tk.Frame):
@@ -187,40 +228,90 @@ class QuestionHeader(tk.Frame):
         subtitle.pack(expand=True, padx=20, pady=10)
 
 
-class Queue(tk.Frame):
+class QueueApp(tk.Frame):
     def __init__(self, master, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
 
-        update_text = InfoPane(master, title="Important", text=IMPORTANT_TEXT,
+        update_text = InfoPane(self, title="Important", text=IMPORTANT_TEXT,
                                padx=20, pady=20)
         update_text.pack()
 
-        quick_queue = QuestionFrame(master, title="Quick Questions",
+        self._quick_queue = quick_queue = Queue()
+        quick_frame = QuestionFrame(self, title="Quick Questions",
                                     subtitle="< 2 mins with a tutor",
                                     examples=QUICK_EXAMPLES,
                                     button="Request Quick Help",
-                                    colour_scheme=COLOUR_SCHEMES["quick"])
-        quick_queue.pack(side=tk.LEFT, anchor=tk.N, fill=tk.X, expand=True)
+                                    colour_scheme=COLOUR_SCHEMES["quick"],
+                                    request_callback=lambda event=None: self.request(quick_queue),
+                                    tick_function=lambda name: self.tick(quick_queue, name),
+                                    cross_function=lambda name: self.cross(quick_queue, name))
+        quick_frame.pack(side=tk.LEFT, anchor=tk.N, fill=tk.X, expand=True)
 
-        brae = Question("1", "Mr Brae Jak Webb", "2", "2 hours")
-        quick_queue.add_question(brae)
-        brae = Question("2", "Peter O'Shea", "1", "1 hour")
-        quick_queue.add_question(brae)
-        brae = Question("3", "Evan Almighty", "2", "45 minutes")
-        quick_queue.add_question(brae)
-
-        long_queue = QuestionFrame(master, title="Long Questions",
+        self._long_queue = long_queue = Queue()
+        long_frame = QuestionFrame(self, title="Long Questions",
                                    subtitle="> 2 mins with a tutor",
                                    examples=LONG_EXAMPLES,
                                    button="Request Long Help",
-                                   colour_scheme=COLOUR_SCHEMES["long"])
-        long_queue.pack(side=tk.LEFT, anchor=tk.N, fill=tk.X, expand=True)
+                                   colour_scheme=COLOUR_SCHEMES["long"],
+                                   request_callback=lambda event=None: self.request(long_queue),
+                                   tick_function=lambda name: self.tick(quick_queue, name),
+                                   cross_function=lambda name: self.cross(quick_queue, name))
+        long_frame.pack(side=tk.LEFT, anchor=tk.N, fill=tk.X, expand=True)
+
+        self._quick_frame = quick_frame
+        self._long_frame = long_frame
+
+    def request(self, queue):
+        name = simpledialog.askstring("Name", "Please Enter Your Name")
+        if name:
+            queue.add_student(name)
+            self.refresh_queues()
+
+    def tick(self, queue, name):
+        queue.remove_student(name)
+        self.refresh_queues()
+
+    def cross(self, queue, name):
+        queue.remove_student(name)
+        self.refresh_queues()
+
+    def refresh_queues(self):
+        self._quick_frame.refresh(self._quick_queue.get_questions())
+        self._long_frame.refresh(self._long_queue.get_questions())
+
+
+class Queue:
+    def __init__(self):
+        self.history = {}
+        self.waiting = []
+
+    def add_student(self, name):
+        if name in self.waiting:
+            return
+
+        count = self.history.get(name, 0)
+        self.history[name] = count + 1
+
+        self.waiting.append(name)
+
+    def remove_student(self, name):
+        self.waiting.remove(name)
+
+    def get_students(self):
+        return self.waiting
+
+    def get_questions(self):
+        questions = []
+        for i, student in enumerate(self.waiting):
+            questions.append(Question(i + 1, student, self.history[student], "N/A"))
+        return questions
 
 
 def main():
     root = tk.Tk()
     root.title("CSSE1001 Queue")
-    Queue(root)
+    queue = QueueApp(root)
+    queue.pack()
     root.mainloop()
 
 
