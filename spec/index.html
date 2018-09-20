@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Peter O'Shea">
+    <title>A3 CSSE1001/7030 Semester 2, 2018</title>
+    
+    <link rel="stylesheet" href="style/index.css" type="text/css">
+</head>
+
+<body class="highlight-changes">
+
+<header class="center-align">
+    <h1 class="header">Queue</h1>
+    <p>Assignment 3<br> CSSE1001/7030<br> Semester 2, 2018</p>
+    <p>Version 1.0.0<br> 25 marks </p>
+    <p>Due Friday 22nd October, 2018, 20:30</p>
+</header>
+
+<div class="container">
+    <div class="row">
+        <section>
+
+            <section>
+                <h2 class="header">Introduction</h2><a name="sec_intro"></a>
+
+                <p>
+                    This assignment will give you an opportunity to create a
+                    Graphical User Interface (GUI) and to apply the techniques
+                    for designing good software that you have been learning in
+                    class.
+                </p>
+
+                <p>
+                    Part 1 of the assignment requires you to create a
+                    CSSE1001/7030 queueing application to mimic the one that is
+                    used currently for CSSE1001/7030 pracs.
+                </p>
+
+                <div class="card">
+                    <a name="fig_basic_gui"></a>
+                    <div class="card-image">
+                        <img src="public/images/queue.png"
+                             alt="Image of Basic GUI Example">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title">Basic GUI Example</span>
+                    </div>
+                </div>
+
+                <p>
+                    Unlike the existing web queue, however, the application you
+                    write is to be accessed via a PC in the CSSE1001 Prac lab,
+                    rather than from the internet. Only one user can access the
+                    application at a time and the software must be written
+                    entirely in Python.
+                </p>
+
+                <p>
+                    The GUI in your software is to have the same labels, buttons
+                    and text as the existing web application, but the “join queue”
+                    buttons will have slightly different functions. When a user
+                    presses either the “Request quick help” button or “Request
+                    long help” button, your software must activate a dialog box
+                    which asks the user for their name. Once they have entered
+                    their name, your software then needs to join the user to the
+                    queue, display their name on the screen, and regularly update
+                    the amount of time they have been waiting on the queue.
+                </p>
+
+                <p>
+                    When a student is added to the queue, they must be added in
+                    such a way that no student who has asked a greater number of
+                    questions in the past 24 hours is ahead of them. A student
+                    must also be able to remove themselves from the queue by
+                    pressing the red button (leaving voluntarily) or the green
+                    button (have had their question answered).
+                </p>
+
+            </section>
+
+            <section>
+                <h2 class="header">Additional Features</h2><a name="sec_additional_features"></a>
+
+                <p>
+                    Part 2 of the assignment requires you to add one or more
+                    new features to the software developed in Part 1.
+                    To obtain a 7 in CSSE1001/7030, you must obtain more
+                    than 50% of the marks for Part 2 of the Assignment.
+
+                    It is up to you which additional feature(s) you add,
+                    but it must be substantial enough to demonstrate your
+                    expertise in writing software.
+
+                    Some suggested example features are:
+
+                </p>
+
+                <ol class="browser-default">
+                    <li>
+                        A python internet based queue
+                    </li>
+                    <li>
+                        Provision of a game which the user can play while
+                        they are waiting to have their questions answered
+                    </li>
+                </ol>
+
+                <p>
+                    All additional features must be written in Python.
+                    To appraise the suitability of a given additional feature,
+                    you are advised to consult with tutors or post a private query on Piazza.
+                </p>
+
+                <p>
+                    For Part 2 of the Assignment you must also submit a
+                    pdf document which describes the additional feature(s)
+                    you have implemented, a brief user manual on the
+                    how to interact with your additional feature software,
+                    and the approach you took to writing the code.
+                </p>
+            </section>
+
+        </section>
+
+        <section>
+
+            <h2 class="header">Masters Task</h2><a name="sec_masters"></a>
+
+            <p>
+                Masters students (i.e. CSSE7030 students) must do an additional task.
+                They must create a menubar which has a “Statistics” tab in it.
+                When this tab is activated it displays the options
+                “Mean”, “Median” and “Mode”. When one of these options is selected
+                it triggers respectively a display of the mean, median and modal
+                time to wait for questions to be answered on both the short and
+                long question queues for the previous day.
+            </p>
+
+        </section>
+
+        <section>
+            <h2 class="header">Criteria</h2><a name="sec_criteria"></a>
+
+            <table class="striped bordered">
+                <thead>
+                <tr>
+                    <th>Criteria</th>
+                    <th style="min-width: 5em">Mark</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr>
+                    <th>Functionality</th>
+                    <th>8</th>
+                </tr>
+                <tr>
+                    <td>Card classes</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>Deck class</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>Player classes</td>
+                    <td>2</td>
+                </tr>
+
+                <tr>
+                    <th>Style &amp; Documentation</th>
+                    <th>2</th>
+                </tr>
+                <tr>
+                    <td>Program is well structured and readable</td>
+                    <td>0.5</td>
+                </tr>
+                <tr>
+                    <td>Variable and function names are meaningful</td>
+                    <td>0.5</td>
+                </tr>
+                <tr>
+                    <td>
+                        Entire program is documented clearly and concisely,
+                        without excessive or extraneous comments
+                    </td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <th>/10</th>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <p>
+                As apart of this assessment, you will be required to discuss
+                your code with a tutor. This discussion will occur in the week
+                following your assignment submission in the practical session
+                to which you are enrolled. <strong>You must attend this session
+                to obtain marks for this assignment.</strong>
+            </p>
+        </section>
+
+        <section>
+            <h2 class="header">Assignment Submission</h2><a name="sec_submission"></a>
+
+            <p>
+                Your assignment must be submitted via the assignment three submission link on Blackboard.
+
+                You must submit a file, <code>a2.py</code>, containing your submission for this assignment.
+                You do not need to submit any other files.
+            </p>
+
+            <p>
+                Late submission of the assignment will <strong>not</strong> be accepted. Do not wait until the last
+                minute to submit your assignment, as the time to upload it may make it late. Multiple submissions are
+                allowed, so ensure that you have submitted an almost complete version of the assignment well before the
+                submission deadline of 6pm. Your latest, on time, submission will be marked. Ensure that you submit the
+                correct version of your assignment. In the event of exceptional circumstances, you may submit a request
+                for an extension. See the <a
+                    href="http://www.courses.uq.edu.au/student_section_loader.php?section=5&profileId=92705">course
+                profile</a> for details of how to apply for an extension.
+            </p>
+
+            <p>
+                Requests for extensions must be made <strong>no later</strong> than 48 hours prior to the submission
+                deadline. The expectation is that with less than 48 hours before an assignment is due it should be
+                substantially completed and submittable. Applications for extension, and any supporting documentation
+                (e.g. medical certificate), must be submitted via <a href="https://my.uq.edu.au/">my.UQ</a>. You must
+                retain the original documentation for a <em>minimum period</em> of six months to provide as verification
+                should you be requested to do so.
+            </p>
+        </section>
+
+
+        <section id="sec_change_log">
+            <h2 class="star">Change Log</h2>
+
+            <p class="hide-print">
+                <input type="checkbox" class="filled-in" id="change_highlighter"/>
+                <label for="change_highlighter">Toggle Change Highlighting/Details</label>
+            </p>
+
+            Any changes that need to be made to the assignment specification will be here.
+        </section>
+
+    </div>
+</div>
+
+<script src="http://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+
+<script type="text/javascript" src="index.js"></script>
+
+</body>
+
+</html>
