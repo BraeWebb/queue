@@ -27,8 +27,7 @@ LONG_EXAMPLES = [
 ]
 
 # text above the queue indicating an update to the queue has occurred
-IMPORTANT_TEXT = "As of 29/5, an update has been made to the queue to factor in the number of questions asked that day (since midnight the night prior), per student. Higher priority will be given to students with lower numbers of questions. This is calculated separately for each of the queues."
-
+IMPORTANT_TEXT = "Individual assessment items must be solely your own work. Students are encouraged to have high-level conversations about their assessment, but this should not result in students handing in the same or similar work for assessment. This is defined as collusion and is handled in the same manner as plagiarism"
 # colours for indicating good and bad actions
 SUCCESS = "#5cb85c"
 DANGER = "#d9534f"
