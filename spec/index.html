@@ -44,7 +44,7 @@
                 <div class="card">
                     <a name="fig_basic_gui"></a>
                     <div class="card-image">
-                        <img src="public/images/queue.png"
+                        <img src="public/images/base.png"
                              alt="Image of Basic GUI Example">
                     </div>
                     <div class="card-content">
@@ -88,6 +88,111 @@
                     asked since opening the application.
                 </p>
 
+            </section>
+
+            <section>
+                <h2 class="header">Queue Header</h2><a name="sec_queue_header"></a>
+
+                <p>
+                    The first task when implementing part 1 of the assignment is
+                    to create a GUI for the top half of the queue. The half includes
+                    the yellow notice at the top, the blue and green headers for
+                    each type of question, a list of example questions and buttons
+                    for requesting help.
+                </p>
+
+                <p>
+                    This section demonstrated in the section below.
+                </p>
+
+                <div class="card">
+                    <a name="fig_basic_gui"></a>
+                    <div class="card-image">
+                        <img src="public/images/header.png"
+                             alt="Image of Basic GUI Example">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title">Queue Header</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="header">Student Queue</h2><a name="sec_student_queue"></a>
+
+                <p>
+                    The second task is to implement a table that lists students
+                    in a queue. This section should have the base functionality
+                    of being able to add students to the queue by clicking the
+                    request help button. It should also have the ability to
+                    remove students from the queue by clicking either the red
+                    button or the green button.
+                </p>
+
+                <p>
+                    To receive marks for this section you do not need
+                    to implement the functionality listed in the functionality
+                    section. This means that the "Questions Today" and "Time"
+                    columns may contain the placeholders of "0" and "a few seconds"
+                    respectively.
+                </p>
+
+                <p>
+                    This section demonstrated in the section below.
+                </p>
+
+                <div class="card">
+                    <a name="fig_basic_gui"></a>
+                    <div class="card-image">
+                        <img src="public/images/queue.png"
+                             alt="Image of Basic GUI Example">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title">Student Queue</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="header">Full Queue Functionality</h2><a name="sec_functionality"></a>
+
+                <p>
+                    The final task of part 1 is to implement the full functionality
+                    of the queue (minus networking). This functionality is documented below.
+                </p>
+
+                <ul class="browser-default">
+                    <li>
+                        Keep track of how many times a question has been asked
+                        by the same student since opening the application.
+                        This number should not be updated if the they were removed
+                        by clicking the red button.
+                    </li>
+                    <li>
+                        Keep track of the approximate time a student has been
+                        waiting on the queue.
+                        <ul>
+                            <li>< 1 minute - display 'a few seconds ago'</li>
+                            <li>= 1 minute - display '1 minute'</li>
+                            <li>> 1 minute - display 'X minute' where X is the amount of minutes</li>
+                            <li>= 1 hour - display '1 hour'</li>
+                            <li>> 1 hour - display 'X hours' where X is the amount of hours</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Prevent the same student from joining multiple times
+                    </li>
+                    <li>
+                        Display the average wait time for the queue. e.g.
+                        An average wait of about <strong>12</strong> minutes for
+                        <strong>2</strong> students.
+                    </li>
+                    <li>
+                        Order the queue in such a way that no student who has
+                        asked a greater number of questions is ahead of any other
+                        student.
+                    </li>
+                </ul>
             </section>
 
             <section>
@@ -168,7 +273,7 @@
                     <th>10</th>
                 </tr>
                 <tr>
-                    <td>Queue Mimics Look</td>
+                    <td>Header Mimics Look</td>
                     <td>8</td>
                 </tr>
                 <tr>
