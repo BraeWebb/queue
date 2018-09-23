@@ -27,10 +27,10 @@ LONG_EXAMPLES = [
 ]
 
 # text above the queue indicating an update to the queue has occurred
-IMPORTANT_TEXT = "Individual assessment items must be solely your own work. Students are encouraged to have " \
-                 "high-level conversations about their assessment, but this should not result in students handing " \
-                 "in the same or similar work for assessment. This is defined as collusion and is handled in the " \
-                 "same manner as plagiarism"
+IMPORTANT_TEXT = "Individual assessment items must be solely your own work. While students are encouraged to have" \
+                 "high-level conversations about the problems they are trying to solve, you must not look at another" \
+                 "student's code or copy from it. The university used sophisticated anti-collusion measures to" \
+                 "automatically detect similarity between assignment submissions."
 
 # colours for indicating good and bad actions
 SUCCESS = "#5cb85c"

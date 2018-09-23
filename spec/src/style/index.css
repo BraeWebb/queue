@@ -266,3 +266,7 @@ body:not(.highlight-changes) [data-version-details] > :first-child {
 strong {
     font-weight: bold !important;
 }
+
+p, li {
+    color: #000000b5;
+}
