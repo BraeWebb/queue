@@ -27,7 +27,11 @@ LONG_EXAMPLES = [
 ]
 
 # text above the queue indicating an update to the queue has occurred
-IMPORTANT_TEXT = "Individual assessment items must be solely your own work. Students are encouraged to have high-level conversations about their assessment, but this should not result in students handing in the same or similar work for assessment. This is defined as collusion and is handled in the same manner as plagiarism"
+IMPORTANT_TEXT = "Individual assessment items must be solely your own work. Students are encouraged to have " \
+                 "high-level conversations about their assessment, but this should not result in students handing " \
+                 "in the same or similar work for assessment. This is defined as collusion and is handled in the " \
+                 "same manner as plagiarism"
+
 # colours for indicating good and bad actions
 SUCCESS = "#5cb85c"
 DANGER = "#d9534f"
@@ -197,9 +201,8 @@ class Separator(tk.Frame):
 class InfoPane(tk.Frame):
     """A box of important information to display to the user"""
 
-    def __init__(self, master, title, text, foreground="#C09853",
-                 background="#fefbed", header_font=("Arial", 18, "bold"),
-                 *args, **kwargs):
+    def __init__(self, master, title, text, *args, foreground="#C09853", background="#fefbed",
+                 header_font=("Arial", 18, "bold"), **kwargs):
         """
         Create a new InfoPane with a title and description
 
@@ -229,9 +232,8 @@ class QuestionFrame(tk.Frame):
     Includes the header, examples of types of questions, the average wait time
     and a table of questions
     """
-    def __init__(self, master, title="Questions", subtitle="", examples=None,
-                 button="Request Help", colour_scheme=None, request_callback=None,
-                 tick_function=None, cross_function=None, *args, **kwargs):
+    def __init__(self, master, *args, title="Questions", subtitle="", examples=None, button="Request Help",
+                 colour_scheme=None, request_callback=None, tick_function=None, cross_function=None, **kwargs):
         """
         Construct a new question frame with title details, examples of questions,
         and a colour scheme
@@ -268,7 +270,7 @@ class QuestionFrame(tk.Frame):
 
         self.draw_separator()
 
-        self._question_table = QuestionTable(self, tick_function, cross_function)
+        self._question_table = QuestionTable(self, tick_function=tick_function, cross_function=cross_function)
         self._question_table.pack(expand=True, fill=tk.BOTH)
 
     def draw_header(self, title, subtitle):
@@ -278,8 +280,7 @@ class QuestionFrame(tk.Frame):
             title (str): Title of this type of question
             subtitle (str): Brief description of this type of question
         """
-        header = QuestionHeader(self, title, subtitle,
-                                colour_scheme=self.colour_scheme)
+        header = QuestionHeader(self, title=title, subtitle=subtitle, colour_scheme=self.colour_scheme)
         header.pack(expand=True, fill=tk.BOTH)
 
     def draw_examples(self, label, examples):
@@ -316,7 +317,7 @@ class QuestionFrame(tk.Frame):
         """Render a horizontal line separator in the frame"""
         Separator(self).pack(fill=tk.X, padx=5, pady=5)
 
-    def draw_average(self, average):
+    def draw_average(self, average):  # pylint: disable=unused-argument
         """Render text to display the average wait time for a question
 
         Parameters:
@@ -337,8 +338,7 @@ class QuestionFrame(tk.Frame):
 class QuestionTable(tk.Frame):
     """A table of questions asked in a queue"""
 
-    def __init__(self, master, tick_function=None, cross_function=None,
-                 *args, **kwargs):
+    def __init__(self, master, *args, tick_function=None, cross_function=None, **kwargs):
         """Construct a new QuestionTable
 
         Parameters:
@@ -448,9 +448,8 @@ class QuestionTable(tk.Frame):
 
 class QuestionHeader(tk.Frame):
     """Header for a question"""
-    def __init__(self, master, title="Questions", subtitle="", colour_scheme=None,
-                 title_font=("Arial", 28, "bold"), subtitle_font=("Arial", 14, ""),
-                 *args, **kwargs):
+    def __init__(self, master, *args, title="Questions", subtitle="", colour_scheme=None,
+                 title_font=("Arial", 28, "bold"), subtitle_font=("Arial", 14, ""), **kwargs):
         """Create a new QuestionHeader
 
         Parameters:
@@ -490,27 +489,20 @@ class QueueApp(tk.Frame):
         super().__init__(master, *args, **kwargs)
 
         # display information about the recent update
-        update_text = InfoPane(self, title="Important", text=IMPORTANT_TEXT,
-                               padx=20, pady=20)
+        update_text = InfoPane(self, title="Important", text=IMPORTANT_TEXT, padx=20, pady=20)
         update_text.pack()
 
         self._quick_queue = quick_queue = Queue()
-        quick_frame = QuestionFrame(self, title="Quick Questions",
-                                    subtitle="< 2 mins with a tutor",
-                                    examples=QUICK_EXAMPLES,
-                                    button="Request Quick Help",
-                                    colour_scheme=QUICK_COLOURS,
+        quick_frame = QuestionFrame(self, title="Quick Questions", subtitle="< 2 mins with a tutor",
+                                    examples=QUICK_EXAMPLES, button="Request Quick Help", colour_scheme=QUICK_COLOURS,
                                     request_callback=lambda event=None: self.request(quick_queue),
                                     tick_function=lambda name: self.tick(quick_queue, name),
                                     cross_function=lambda name: self.cross(quick_queue, name))
         quick_frame.pack(side=tk.LEFT, anchor=tk.N, fill=tk.X, expand=True)
 
         self._long_queue = long_queue = Queue()
-        long_frame = QuestionFrame(self, title="Long Questions",
-                                   subtitle="> 2 mins with a tutor",
-                                   examples=LONG_EXAMPLES,
-                                   button="Request Long Help",
-                                   colour_scheme=LONG_COLOURS,
+        long_frame = QuestionFrame(self, title="Long Questions", subtitle="> 2 mins with a tutor",
+                                   examples=LONG_EXAMPLES, button="Request Long Help", colour_scheme=LONG_COLOURS,
                                    request_callback=lambda event=None: self.request(long_queue),
                                    tick_function=lambda name: self.tick(long_queue, name),
                                    cross_function=lambda name: self.cross(long_queue, name))
