@@ -361,7 +361,7 @@ class QuestionTable(tk.Frame):
         tk.Grid.columnconfigure(self, 3, weight=1)
 
         # create a header row for the question table
-        header = Question("#", "Name", "Questions Today", "Time")
+        header = Question("#", "Name", "Questions Asked", "Time")
         self.build_row(header, 0, font=("Arial", 14, "bold"))
 
         # add a separator after the header
@@ -500,6 +500,9 @@ class QueueApp(tk.Frame):
                                     cross_function=lambda name: self.cross(quick_queue, name))
         quick_frame.pack(side=tk.LEFT, anchor=tk.N, fill=tk.X, expand=True)
 
+        # quick_frame._question_table.build_row(Question(1, "Barry B. Benson", 0, "a few seconds ago"), 2,
+        #                                       tick=self.tick, cross=self.cross)
+
         self._long_queue = long_queue = Queue()
         long_frame = QuestionFrame(self, title="Long Questions", subtitle="> 2 mins with a tutor",
                                    examples=LONG_EXAMPLES, button="Request Long Help", colour_scheme=LONG_COLOURS,
@@ -507,6 +510,11 @@ class QueueApp(tk.Frame):
                                    tick_function=lambda name: self.tick(long_queue, name),
                                    cross_function=lambda name: self.cross(long_queue, name))
         long_frame.pack(side=tk.LEFT, anchor=tk.N, fill=tk.X, expand=True)
+
+        # long_frame._question_table.build_row(Question(1, "Vanessa Bloome", 0, "a few seconds ago"), 2,
+        #                                      tick=self.tick, cross=self.cross)
+        # long_frame._question_table.build_row(Question(2, "Adam Flayman", 0, "a few seconds ago"), 3,
+        #                                      tick=self.tick, cross=self.cross)
 
         self._quick_frame = quick_frame
         self._long_frame = long_frame
