@@ -30,6 +30,10 @@ h4 {
     border-top: 1px solid #d0d0d0;
 }
 
+@media print {
+    section[name="criteria"]	{ display: block; page-break-before: always; }
+}
+
 .mark-breakdown thead tr th {
     text-align: center;
 }
